@@ -2,6 +2,8 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
 
+  beepEffect = new Audio("beep.mp3");
+
   static targets = [
     "hourLeft",
     "hourRight",
@@ -40,6 +42,11 @@ export default class extends Controller {
       8: "eight",
       9: "nine",
     }
+  }
+
+  beep(e) {
+    this.beepEffect.currentTime = 0;
+    this.beepEffect.play();
   }
 
   buttonPress(e) {
