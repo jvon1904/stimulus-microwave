@@ -21,7 +21,6 @@ export default class extends Controller {
   }
 
   initCanvas() {
-    console.log('initializing canvas')
     this.canvasTarget.width = this.paneTarget.offsetWidth;
     this.canvasTarget.height = this.paneTarget.offsetHeight;
     const ctx = this.canvasTarget.getContext("2d");
