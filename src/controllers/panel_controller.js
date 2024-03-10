@@ -3,6 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
 
   beepEffect = new Audio("beep.mp3");
+  dingEffect = new Audio("ding.mp3")
 
   static targets = [
     "hourLeft",
@@ -44,9 +45,14 @@ export default class extends Controller {
     }
   }
 
-  beep(e) {
+  beep() {
     this.beepEffect.currentTime = 0;
     this.beepEffect.play();
+  }
+
+  ding() {
+    this.dingEffect.currentTime = 0;
+    this.dingEffect.play();
   }
 
   buttonPress(e) {
@@ -134,30 +140,26 @@ export default class extends Controller {
   add() {
     this.kitchenTimerTarget.classList.remove('pushed');
     this.modeValue = 'plus'
-    this.sum += this.number;
+    this.sumValue += this.number;
     this.clearScreen();
   }
 
   subtract() {
     this.kitchenTimerTarget.classList.remove('pushed');
-    this.sum += this.number;
+    this.sumValue += this.number;
     this.modeValue = 'minus'
     this.clearScreen();
   }
 
   equals() {
-    console.log("from equals ", this.modeValue)
-    console.log(this.sum)
     if (this.modeValue === 'minus') {
-      this.sum -= this.number;
+      this.sumValue -= this.number;
     } else if (this.modeValue === 'plus') {
-      console.log("hello!")
-      this.sum += this.number;
+      this.sumValue += this.number;
     }
-    console.log(this.sum)
     this.modeValue = 'equals'
-    this.renderNumbers(this.sum)
-    this.sum = 0;
+    this.renderNumbers(this.sumValue)
+    this.sumValue = 0;
   }
 
   get hour() {
@@ -288,20 +290,13 @@ export default class extends Controller {
     let time = this.number;
     this.timerInterval = setInterval(() => {
       time -= 1;
-      if (time < 0) {
+      if (time <= 0) {
+        this.ding();
         this.clearScreen();
-        if (this.modeValue === 'cooking') {
-          this.endCook();
-        }
         return;
       }
       this.renderNumbers(time);
       this.colonBlink();
     }, 1000);
-  }
-
-  endCook() {
-    console.log('cooking ended');
-    this.modeValue = 'numbers'
   }
 }
