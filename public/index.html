@@ -10,10 +10,11 @@
   <main>
     <h2 class="top"></h2>
     <div class="outline">
-      <div class="face">
-        <div class="door" data-controller="door">
+      <div class="face" data-controller="door" data-controller="panel" data-action="panel:cook->door#lightOn panel:cancel->door#lightOff">
+        <div class="door">
           <div class="pane" data-door-target="pane">
-            <canvas data-door-target="canvas"></canvas>
+            <div class="light" data-door-target="light"></div>
+            <canvas class="grid" data-door-target="canvas"></canvas>
           </div>
         </div>
         <div 

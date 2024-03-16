@@ -1,10 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 import { useResize } from "stimulus-use"
-
 export default class extends Controller {
 
   static targets = [
     "pane",
+    "light",
     "canvas"
   ]
 
@@ -18,6 +18,14 @@ export default class extends Controller {
 
   resize() {
     this.initCanvas();
+  }
+
+  lightOn() {
+    this.lightTarget.classList.add('cooking')
+  }
+
+  lightOff() {
+    this.lightTarget.classList.remove('cooking');
   }
 
   initCanvas() {

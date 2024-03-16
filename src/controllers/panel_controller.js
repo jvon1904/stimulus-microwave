@@ -3,7 +3,8 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
 
   beepEffect = new Audio("beep.mp3");
-  dingEffect = new Audio("ding.mp3")
+  dingEffect = new Audio("ding.mp3");
+  fanEffect = new Audio("fan.mp3");
 
   static targets = [
     "hourLeft",
@@ -53,6 +54,16 @@ export default class extends Controller {
   ding() {
     this.dingEffect.currentTime = 0;
     this.dingEffect.play();
+  }
+
+  fan() {
+    this.fanEffect.loop = true;
+    this.fanEffect.currentTime = 0;
+    this.fanEffect.play();
+  }
+
+  stopFan() {
+    this.fanEffect.pause();
   }
 
   buttonPress(e) {
@@ -112,25 +123,30 @@ export default class extends Controller {
   }
 
   start() {
-    if (this.modeValue === 'timer' || this.modeValue === 'paused') {
+    if (this.modeValue === 'timer' || this.modeValue === 'paused-timer') {
+      this.modeValue = 'timing';
       this.startTimer();
-    } else if (this.modeValue === 'cook') {
-      this.modeValue = 'cooking';
-      this.startTimer();
+    } else if (this.modeValue === 'cook' || this.modeValue === 'paused-cook') {
+      this.startCook()
     } else {
       this.clearScreen();
-      this.modeValue = 'cooking';
       this.renderNumbers(30);
-      this.startTimer();
+      this.startCook();
     }
   }
 
   cancel() {
-    if (this.modeValue === 'counting') {
-      let number = this.number;
+    let number = this.number;
+    if (this.modeValue === 'timing') {
       this.clearScreen();
       this.renderNumbers(number);
-      this.modeValue = 'paused'
+      this.modeValue = 'paused-timer'
+    } else if (this.modeValue === 'cooking') {
+      this.dispatch('cancel');
+      this.stopFan();
+      this.clearScreen();
+      this.renderNumbers(number);
+      this.modeValue = 'paused-cook'
     } else {
       this.clock();
     }
@@ -224,7 +240,7 @@ export default class extends Controller {
     // this.modeValue = 'numbers';
     let newNumbers = [...this.numbers, number];
     newNumbers.shift();
-    this.renderNumber(newNumbers)
+    this.renderDisplay(newNumbers)
   }
 
   colonBlink() {
@@ -241,7 +257,7 @@ export default class extends Controller {
     numbers.push(this.digitMapping[this.minutes[0]]);
     numbers.push(this.digitMapping[this.minutes[1]]);
 
-    this.renderNumber(numbers)
+    this.renderDisplay(numbers)
   }
 
   renderNumbers(numbers) {
@@ -256,53 +272,80 @@ export default class extends Controller {
     num = isNaN(numbersString[3]) ? numbersString[3] : parseInt(numbersString[3])
     numbersArray.push(this.digitMapping[num]);
 
-    this.renderNumber(numbersArray)
+    this.renderDisplay(numbersArray)
   }
 
-  renderNumber(numbers) {
-    const hourLeft = numbers[0];
-    const hourRight = numbers[1];
-    const minLeft = numbers[2];
-    const minRight = numbers[3];
+  renderDisplay(chars) {
+    const hourLeft = chars[0];
+    const hourRight = chars[1];
+    const minLeft = chars[2];
+    const minRight = chars[3];
 
-    this.renderDigit(this.hourLeftTarget, hourLeft);
-    this.renderDigit(this.hourRightTarget, hourRight);
-    this.renderDigit(this.minLeftTarget, minLeft);
-    this.renderDigit(this.minRightTarget, minRight);
+    this.renderChar(this.hourLeftTarget, hourLeft);
+    this.renderChar(this.hourRightTarget, hourRight);
+    this.renderChar(this.minLeftTarget, minLeft);
+    this.renderChar(this.minRightTarget, minRight);
   }
 
-  renderDigit(target, number) {
+  renderChar(target, char) {
     let klass = target.classList[0];
 
     if (klass) {
-      target.classList.replace(klass, number)
+      target.classList.replace(klass, char)
     } else {
-      target.classList.add(number);
+      target.classList.add(char);
     }
   }
 
-  clearScreen() {
+  clearScreen(charArray = null) {
     clearInterval(this.timerInterval);
     clearInterval(this.timeInterval);
     this.colonTarget.classList.add("blank");
     this.kitchenTimerTarget.classList.remove('pushed');
     this.timeCookTarget.classList.remove('pushed');
-    this.renderNumber(['zero','zero','zero','zero'])
+    if (charArray) {
+      this.renderDisplay(charArray)
+    } else {
+      this.renderDisplay(['zero','zero','zero','zero'])
+    }
+  }
+
+  startCook() {
+    this.modeValue = 'cooking';
+    this.dispatch('cook')
+    this.fan();
+    this.startTimer();
+  }
+
+  endCook() {
+    this.ding()
+    setTimeout(() => {
+      this.dispatch('cancel');
+    }, 800)
+    setTimeout(() => {
+      this.stopFan();
+    }, 400);
   }
 
   startTimer() {
-    this.modeValue = 'counting'
     this.colonBlink();
     let time = this.number;
     this.timerInterval = setInterval(() => {
       time -= 1;
       if (time <= 0) {
-        this.ding();
-        this.clearScreen();
+        this.endTimer();
         return;
       }
       this.renderNumbers(time);
       this.colonBlink();
     }, 1000);
+  }
+
+  endTimer() {
+    if (this.modeValue === 'cooking') {
+      this.endCook();
+    }
+    this.ding();
+    this.clearScreen(['blank', 'E', 'n', 'd']);
   }
 }
