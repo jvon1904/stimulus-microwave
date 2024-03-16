@@ -56,7 +56,6 @@ export default class extends Controller {
   }
 
   buttonPress(e) {
-    console.log(this.modeValue)
     const number = this.digitMapping[e.target.innerText]
     switch(this.modeValue) {
       case 'clock':
@@ -139,14 +138,18 @@ export default class extends Controller {
 
   add() {
     this.kitchenTimerTarget.classList.remove('pushed');
+    if (this.modeValue !== 'clock') {
+      this.sumValue += this.number;
+    }
     this.modeValue = 'plus'
-    this.sumValue += this.number;
     this.clearScreen();
   }
 
   subtract() {
     this.kitchenTimerTarget.classList.remove('pushed');
-    this.sumValue += this.number;
+    if (this.modeValue !== 'clock') {
+      this.sumValue += this.number;
+    }
     this.modeValue = 'minus'
     this.clearScreen();
   }
@@ -203,12 +206,15 @@ export default class extends Controller {
     number += Object.keys(this.digitMapping).find(key => this.digitMapping[key] === numbers[1]);
     number += Object.keys(this.digitMapping).find(key => this.digitMapping[key] === numbers[2]);
     number += Object.keys(this.digitMapping).find(key => this.digitMapping[key] === numbers[3]);
-
-    return parseInt(number);
+    return parseInt(this.sanitizeNegative(number));
   }
 
   get numberString() {
     return this.number.toString().padStart(4, '0')
+  }
+
+  sanitizeNegative(num) {
+    return num.replaceAll(/\d(?=(.*\-))/g, '');
   }
 
   pushNumber(number) {
