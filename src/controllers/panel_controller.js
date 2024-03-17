@@ -95,6 +95,10 @@ export default class extends Controller {
       case 'cook':
         this.pushNumber(number);
         break;
+      case 'end':
+        this.clearScreen()
+        this.pushNumber(number);
+        break;
       default:
     }
   }
@@ -386,5 +390,6 @@ export default class extends Controller {
     }
     this.ding();
     this.clearScreen(['blank', 'E', 'n', 'd']);
+    this.modeValue = 'end'
   }
 }
