@@ -100,6 +100,9 @@ export default class extends Controller {
   }
 
   clock() {
+    if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
+      return false;
+    }
     this.clearScreen();
     this.modeValue = 'clock'
     clearInterval(this.timeInterval);
@@ -111,14 +114,22 @@ export default class extends Controller {
   }
 
   timer() {
+    if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
+      return false;
+    }
     this.clearScreen();
     this.modeValue = 'timer';
+    this.colonTarget.classList.remove("blank");
     this.kitchenTimerTarget.classList.add('pushed')
   }
   
   cook() {
+    if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
+      return false;
+    }
     this.clearScreen();
     this.modeValue = 'cook';
+    this.colonTarget.classList.remove("blank");
     this.timeCookTarget.classList.add('pushed')
   }
 
@@ -128,6 +139,8 @@ export default class extends Controller {
       this.startTimer();
     } else if (this.modeValue === 'cook' || this.modeValue === 'paused-cook') {
       this.startCook()
+    } else if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
+      this.renderNumbers(this.toTime(this.toSeconds(this.number) + 30));
     } else {
       this.clearScreen();
       this.renderNumbers(30);
@@ -153,6 +166,9 @@ export default class extends Controller {
   }
 
   add() {
+    if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
+      return false;
+    }
     this.kitchenTimerTarget.classList.remove('pushed');
     if (this.modeValue !== 'clock') {
       this.sumValue += this.number;
@@ -162,6 +178,9 @@ export default class extends Controller {
   }
 
   subtract() {
+    if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
+      return false;
+    }
     this.kitchenTimerTarget.classList.remove('pushed');
     if (this.modeValue !== 'clock') {
       this.sumValue += this.number;
@@ -171,6 +190,9 @@ export default class extends Controller {
   }
 
   equals() {
+    if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
+      return false;
+    }
     if (this.modeValue === 'minus') {
       this.sumValue -= this.number;
     } else if (this.modeValue === 'plus') {
@@ -233,11 +255,24 @@ export default class extends Controller {
     return num.replaceAll(/\d(?=(.*\-))/g, '');
   }
 
+  toTime(num) {
+    const seconds = num % 60;
+    const minutes = (num - seconds) / 60;
+    const time = minutes.toString().padStart(2, '0') + seconds.toString().padStart(2, '0');
+    return parseInt(time)
+  }
+
+  toSeconds(time) {
+    const digits = time.toString().padStart(4, '0');
+    const minutes = parseInt(digits.slice(0,2));
+    const seconds = parseInt(digits.slice(2,4));
+    return (minutes * 60) + seconds;
+  }
+
   pushNumber(number) {
     if (this.modeValue == 'clock') { 
       this.clearScreen();
     }
-    // this.modeValue = 'numbers';
     let newNumbers = [...this.numbers, number];
     newNumbers.shift();
     this.renderDisplay(newNumbers)
@@ -328,10 +363,14 @@ export default class extends Controller {
   }
 
   startTimer() {
-    this.colonBlink();
     let time = this.number;
+    if (time <= 0) {
+      this.renderNumbers(30);
+      time = this.number;
+    }
+    this.colonBlink();
     this.timerInterval = setInterval(() => {
-      time -= 1;
+      time = this.toTime(this.toSeconds(this.number) - 1);
       if (time <= 0) {
         this.endTimer();
         return;

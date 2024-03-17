@@ -488,11 +488,29 @@ main {
 .button.cancel {
   border-color: hsl(5, 50%, 50%);
   color: hsl(5, 50%, 75%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.clear {
+  border-top: 1px solid hsl(5, 50%, 75%);
+  font-size: 12px;
 }
 
 .button.start {
   border-color: hsl(115, 50%, 50%);
-  color: hsl(115, 50%, 75%)
+  color: hsl(115, 50%, 75%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.plus-thirty {
+  border-top: 1px solid hsl(115, 50%, 75%);
+  font-size: 12px;
 }
 
 .controls-bottom > .row {
