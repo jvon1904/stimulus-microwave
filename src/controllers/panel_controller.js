@@ -14,6 +14,14 @@ export default class extends Controller {
     "colon",
     "am",
     "pm",
+    "sun",
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "dow",
     "kitchenTimer",
     "timeCook"
   ]
@@ -127,6 +135,55 @@ export default class extends Controller {
   pm() {
     this.amTarget.classList.remove('selected')
     this.pmTarget.classList.add('selected')
+  }
+
+  sun() {
+    this.dowTargets.forEach((t) => {
+      t.classList.remove('selected')
+    });
+    this.sunTarget.classList.add('selected');
+  }
+
+  mon() {
+    this.dowTargets.forEach((t) => {
+      t.classList.remove('selected')
+    });
+    this.monTarget.classList.add('selected');
+  }
+
+  tue() {
+    this.dowTargets.forEach((t) => {
+      t.classList.remove('selected')
+    });
+    this.tueTarget.classList.add('selected');
+  }
+
+  wed() {
+    this.dowTargets.forEach((t) => {
+      t.classList.remove('selected')
+    });
+    this.wedTarget.classList.add('selected');
+  }
+
+  thu() {
+    this.dowTargets.forEach((t) => {
+      t.classList.remove('selected')
+    });
+    this.thuTarget.classList.add('selected');
+  }
+
+  fri() {
+    this.dowTargets.forEach((t) => {
+      t.classList.remove('selected')
+    });
+    this.friTarget.classList.add('selected');
+  }
+
+  sat() {
+    this.dowTargets.forEach((t) => {
+      t.classList.remove('selected')
+    });
+    this.satTarget.classList.add('selected');
   }
 
   timer() {
@@ -261,6 +318,10 @@ export default class extends Controller {
     }
   }
 
+  get day() {
+    return new Date().getDay();
+  }
+
   get number() {
     const numbers = this.numbers;
     let number = ''
@@ -316,6 +377,7 @@ export default class extends Controller {
     numbers.push(this.digitMapping[this.minutes[0]]);
     numbers.push(this.digitMapping[this.minutes[1]]);
     this.renderAmPm(this.amPm);
+    this.renderDay(this.day);
     this.renderDisplay(numbers)
   }
 
@@ -326,6 +388,32 @@ export default class extends Controller {
         break;
       case 'pm':
         this.pm();
+        break;
+    }
+  }
+
+  renderDay(day) {
+    switch (day) {
+      case 0:
+        this.sun();
+        break;
+      case 1:
+        this.mon();
+        break;
+      case 2:
+        this.tue();
+        break;
+      case 3:
+        this.wed();
+        break;
+      case 4:
+        this.thu();
+        break;
+      case 5:
+        this.fri();
+        break;
+      case 6:
+        this.sat();
         break;
     }
   }

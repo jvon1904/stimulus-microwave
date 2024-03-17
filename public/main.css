@@ -149,24 +149,25 @@ main {
 .digits {
   padding: 2px;
   padding-left: 10px;
+  padding-right: 5px;
   display: flex;
   flex-direction: row;
   align-items: stretch;
   justify-content: space-between;
-  width: 190px;
+  width: 185px;
 }
 
-.am-pm {
-  padding: 2px;
-  padding-top: 10px;
+.am-pm-dow {
+  padding-top: 5px;
+  padding-right: 4px;
 }
 
-.am, .pm {
+.am-pm-dow-el {
   color: var(--lcd-gray);
-  font-size: 8px;
+  font-size: 7px;
 }
 
-.am.selected, .pm.selected {
+.am-pm-dow-el.selected {
   color: var(--lcd-green);
 }
 
