@@ -12,6 +12,8 @@ export default class extends Controller {
     "minLeft",
     "minRight",
     "colon",
+    "am",
+    "pm",
     "kitchenTimer",
     "timeCook"
   ]
@@ -115,6 +117,16 @@ export default class extends Controller {
       this.renderTime()
       this.colonBlink()
     }, 1000);
+  }
+
+  am() {
+    this.pmTarget.classList.remove('selected')
+    this.amTarget.classList.add('selected')
+  }
+  
+  pm() {
+    this.amTarget.classList.remove('selected')
+    this.pmTarget.classList.add('selected')
   }
 
   timer() {
@@ -241,6 +253,14 @@ export default class extends Controller {
     return numbers;
   }
 
+  get amPm() {
+    if (this.hour <= 12) {
+      return 'am'
+    } else {
+      return 'pm'
+    }
+  }
+
   get number() {
     const numbers = this.numbers;
     let number = ''
@@ -295,8 +315,19 @@ export default class extends Controller {
     numbers.push(this.digitMapping[this.hour[1]]);
     numbers.push(this.digitMapping[this.minutes[0]]);
     numbers.push(this.digitMapping[this.minutes[1]]);
-
+    this.renderAmPm(this.amPm);
     this.renderDisplay(numbers)
+  }
+
+  renderAmPm(ampm) {
+    switch (ampm) {
+      case 'am': 
+        this.am();
+        break;
+      case 'pm':
+        this.pm();
+        break;
+    }
   }
 
   renderNumbers(numbers) {
