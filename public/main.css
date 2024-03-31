@@ -95,14 +95,34 @@ main {
   right: 0;
   bottom: 0;
   left: 0;
-  background-image: radial-gradient(500px, #d9cf9a, #222);
   z-index: -1;
   transition: opacity 0.5s linear;
+  background-image: radial-gradient(500px, #d9cf9a, #222);
+  background-size: 200% 100%;
   opacity: 0;
 }
 
 .light.cooking {
   opacity: 1;
+  animation: spinning-light 5s linear infinite;
+}
+
+@keyframes spinning-light {
+  from {
+    background-position: 50%;
+  }
+
+  33% {
+    background-position: 33%;
+  }
+
+  66% {
+    background-position: 66%;
+  }
+
+  to {
+    background-position: 50%;
+  }
 }
 
 .circle {
