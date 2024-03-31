@@ -409,6 +409,22 @@ main {
   background-color: var(--lcd-gray)
 }
 
+.L > p.num-line {
+  background-color: var(--lcd-gray)
+}
+
+.L > p.num-top-left {
+  background-color: var(--lcd-green)
+}
+
+.L > p.num-bottom-left {
+  background-color: var(--lcd-green)
+}
+
+.L > p.num-bottom {
+  background-color: var(--lcd-green)
+}
+
 .panel-bottom {
   height: 18%;
   display: flex;

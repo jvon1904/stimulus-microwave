@@ -7,9 +7,9 @@
   <script src="bundle.js" async></script>
 </head>
 <body>
-  <main>
+  <main data-controller="leet" data-action="leet-mode@window->leet#start normal-mode@window->leet#stop">
     <h2 class="top"></h2>
-    <div class="outline">
+    <div class="outline" data-leet-target="outline">
       <div class="face" data-controller="door" data-controller="panel" data-action="panel:cook->door#lightOn panel:cancel->door#lightOff">
         <div class="door">
           <div class="pane" data-door-target="pane">

@@ -114,7 +114,7 @@ export default class extends Controller {
   }
 
   clock() {
-    if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
+    if (this.modeValue === 'leet' || this.modeValue === 'cooking' || this.modeValue === 'timing') {
       return false;
     }
     this.clearScreen();
@@ -187,7 +187,9 @@ export default class extends Controller {
   }
 
   timer() {
-    if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
+    if (this.modeValue === 'leet') {
+      return false
+    } else if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
       return false;
     }
     this.clearScreen();
@@ -197,7 +199,9 @@ export default class extends Controller {
   }
   
   cook() {
-    if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
+    if (this.modeValue === 'leet') {
+      return false
+    } else if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
       return false;
     }
     this.clearScreen();
@@ -207,23 +211,31 @@ export default class extends Controller {
   }
 
   start() {
-    if (this.modeValue === 'timer' || this.modeValue === 'paused-timer') {
-      this.modeValue = 'timing';
-      this.startTimer();
-    } else if (this.modeValue === 'cook' || this.modeValue === 'paused-cook') {
-      this.startCook()
-    } else if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
-      this.renderNumbers(this.toTime(this.toSeconds(this.number) + 30));
+    if (this.modeValue === 'leet') {
+      return false;
+    } else if (this.isLeet) {
+      this.enterLeetMode();
     } else {
-      this.clearScreen();
-      this.renderNumbers(30);
-      this.startCook();
+      if (this.modeValue === 'timer' || this.modeValue === 'paused-timer') {
+        this.modeValue = 'timing';
+        this.startTimer();
+      } else if (this.modeValue === 'cook' || this.modeValue === 'paused-cook') {
+        this.startCook()
+      } else if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
+        this.renderNumbers(this.toTime(this.toSeconds(this.number) + 30));
+      } else {
+        this.clearScreen();
+        this.renderNumbers(30);
+        this.startCook();
+      }
     }
   }
 
   cancel() {
     let number = this.number;
-    if (this.modeValue === 'timing') {
+    if (this.modeValue === 'leet') {
+      this.exitLeetMode();
+    } else if (this.modeValue === 'timing') {
       this.clearScreen();
       this.renderNumbers(number);
       this.modeValue = 'paused-timer'
@@ -239,7 +251,7 @@ export default class extends Controller {
   }
 
   add() {
-    if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
+    if (this.modeValue === 'leet' || this.modeValue === 'cooking' || this.modeValue === 'timing') {
       return false;
     }
     this.kitchenTimerTarget.classList.remove('pushed');
@@ -251,7 +263,7 @@ export default class extends Controller {
   }
 
   subtract() {
-    if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
+    if (this.modeValue === 'leet' || this.modeValue === 'cooking' || this.modeValue === 'timing') {
       return false;
     }
     this.kitchenTimerTarget.classList.remove('pushed');
@@ -263,7 +275,7 @@ export default class extends Controller {
   }
 
   equals() {
-    if (this.modeValue === 'cooking' || this.modeValue === 'timing') {
+    if (this.modeValue === 'leet' || this.modeValue === 'cooking' || this.modeValue === 'timing') {
       return false;
     }
     if (this.modeValue === 'minus') {
@@ -334,6 +346,10 @@ export default class extends Controller {
 
   get numberString() {
     return this.number.toString().padStart(4, '0')
+  }
+
+  get isLeet() {
+    return this.modeValue === 'numbers' && this.number === 1337;
   }
 
   sanitizeNegative(num) {
@@ -516,5 +532,19 @@ export default class extends Controller {
     this.ding();
     this.clearScreen(['blank', 'E', 'n', 'd']);
     this.modeValue = 'end'
+  }
+
+  enterLeetMode() {
+    const leetEvent = new CustomEvent("leet-mode");
+    window.dispatchEvent(leetEvent);
+    this.clearScreen(["L", "E", "E", "seven"])
+    this.modeValue = "leet"
+  }
+
+  exitLeetMode() {
+    const leetEvent = new CustomEvent("normal-mode");
+    window.dispatchEvent(leetEvent);
+    this.clearScreen(["one", "three", "three", "seven"])
+    this.modeValue = "numbers";
   }
 }
