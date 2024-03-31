@@ -376,13 +376,13 @@ export default class extends Controller {
     numbers.push(this.digitMapping[this.hour[1]]);
     numbers.push(this.digitMapping[this.minutes[0]]);
     numbers.push(this.digitMapping[this.minutes[1]]);
-    this.renderAmPm(this.amPm);
+    this.renderAmPm();
     this.renderDay(this.day);
-    this.renderDisplay(numbers)
+    this.renderDisplay(numbers);
   }
 
-  renderAmPm(ampm) {
-    switch (ampm) {
+  renderAmPm() {
+    switch (this.amPm) {
       case 'am': 
         this.am();
         break;
@@ -390,6 +390,11 @@ export default class extends Controller {
         this.pm();
         break;
     }
+  }
+
+  clearAmPm() {
+    this.amTarget.classList.remove('selected')
+    this.pmTarget.classList.remove('selected')
   }
 
   renderDay(day) {
@@ -459,6 +464,7 @@ export default class extends Controller {
     clearInterval(this.timerInterval);
     clearInterval(this.timeInterval);
     this.colonTarget.classList.add("blank");
+    this.clearAmPm();
     this.kitchenTimerTarget.classList.remove('pushed');
     this.timeCookTarget.classList.remove('pushed');
     if (charArray) {
