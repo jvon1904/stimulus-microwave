@@ -78,7 +78,6 @@ main {
   background-repeat: no-repeat;
   background: radial-gradient(500px, #999, #222);
   display: grid;
-  grid-template-columns: repeat(auto-fill, 7px);
   overflow: hidden;
   box-shadow: inset 0px 0px 5px black, inset 0px 0px 2px black, inset 0px 0px 10px #333;
   border: 3px solid black;
@@ -122,6 +121,60 @@ main {
 
   to {
     background-position: 50%;
+  }
+}
+
+.leet__screen {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transition: opacity 0.5s linear;
+  background-color: #021407;
+  color: var(--lcd-green);
+  opacity: 0%;
+  padding: 1rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 700;
+}
+
+.leet__screen.on {
+  opacity: 100%;
+}
+
+.leet__screen.on > p.leet__text {
+  /* animation: fade-in-out 1s linear infinite; */
+}
+
+.leet__screen > canvas.leet__canvas {
+  opacity: 0%;
+}
+
+.leet__screen.on > canvas.leet__canvas {
+  opacity: 100%;
+  width: 1000px;
+  height: 50px;
+}
+
+@keyframes fade-in-out {
+  from {
+    opacity: 100%;
+  }
+
+  33% {
+    opacity: 50%;
+  }
+
+  40% {
+    opacity: 100%;
+  }
+
+  to {
+    opacity: 100%;
   }
 }
 
