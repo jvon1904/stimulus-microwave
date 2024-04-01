@@ -10,7 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <main data-controller="leet" data-action="leet-mode@window->leet#start normal-mode@window->leet#stop">
+  <main 
+    data-controller="leet" 
+    data-action="leet-mode@window->leet#start normal-mode@window->leet#stop"
+    >
     <h2 class="top"></h2>
     <div class="outline" data-leet-target="outline">
       <div class="face" data-controller="door" data-controller="panel" data-action="panel:cook->door#lightOn panel:cancel->door#lightOff">
@@ -20,7 +23,8 @@
             <canvas class="grid" data-door-target="canvas"></canvas>
             <div class="leet__screen" data-leet-target="screen">
               <canvas class="leet__canvas" data-leet-target="canvas"></canvas>
-              <!-- <p class="leet__text">Welcome to LEET mode...</p> -->
+              <div class="leet__input-container" data-leet-target="inputContainer"></div>
+              <div class="leet__label-container" data-leet-target="labelContainer"></div>
             </div>
           </div>
         </div>

@@ -156,8 +156,52 @@ main {
 
 .leet__screen.on > canvas.leet__canvas {
   opacity: 100%;
-  width: 1000px;
-  height: 50px;
+  width: 100%;
+  height: 30px;
+}
+
+.leet__input-container {
+  width: 100%;
+}
+
+.leet__input-line {
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.leet__label-container {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.leet__label {
+  margin-left: 0.5rem;
+  background-color: transparent;
+  width: 100%;
+  outline: none;
+  border: none;
+  font-family: ;
+  color: yellowgreen;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 500;
+  font-size: 10px;
+}
+
+.leet__input {
+  margin-left: 0.5rem;
+  background-color: transparent;
+  width: 100%;
+  outline: none;
+  border: none;
+  font-family: ;
+  color: yellowgreen;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 500;
 }
 
 @keyframes fade-in-out {
