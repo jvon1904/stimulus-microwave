@@ -54,6 +54,10 @@ export default class extends Controller {
     this.outlineTarget.style.background = this.gradient(color);
   }
 
+  help() {
+    this.display("set-color <hue: Integer> - Set the color with an HSL hue of 0-360");
+  }
+
   gradient(color = undefined) {
     const col = color || Math.random() * 361
     const col1 = `hsl(${col}, 100%, 50%)`;
@@ -115,6 +119,8 @@ export default class extends Controller {
       const col = txt.split(' ').slice(-1);
       this.display('setting color...');
       this.setColor(col);
+    } else if ((/^help$/.test(txt))) {
+      this.help();
     } else {
       this.display(`You just typed "${txt}"`);
     }
